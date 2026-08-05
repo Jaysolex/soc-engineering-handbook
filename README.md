@@ -8,7 +8,7 @@ An engineering-grade, production reference — not exam notes. Every chapter is 
 
 ## Chapter Format
 
-Each chapter follows the standard operational template: Purpose, Problem It Solves, Architecture, Workflow, Inputs/Outputs, Internal Logic, Operational Workflow, Production Workflow, Senior SOC Decision Process, Common Use Cases, Best Practices, Common Mistakes, Automation Opportunities, Security Considerations, Related Features, Real Production Example, Interview Notes, Exam Notes, Key Takeaways — adapted per chapter as needed (e.g., Chapter 1 uses a 10-part architectural narrative since it establishes the platform model everything else depends on).
+Each chapter follows the standard operational template: Purpose, Problem It Solves, Architecture, Workflow, Inputs/Outputs, Internal Logic, Operational Workflow, Production Workflow, Senior SOC Decision Process, Common Use Cases, Best Practices, Common Mistakes, Automation Opportunities, Security Considerations, Related Features, Real Production Example, Example Scripts (where applicable), Key Takeaways — adapted per chapter as needed (e.g., Chapter 1 uses a 10-part architectural narrative since it establishes the platform model everything else depends on). No Interview/Exam Notes sections — this is a working production reference, not certification prep.
 
 ## Learning Order
 

@@ -197,21 +197,146 @@ A SOC detects a correlation alert for a known persistence technique (suspicious 
 6. **Escalation:** Analyst attaches the script output to the case, escalates to isolate the host (separate, native response action) and opens a remediation task to remove the scheduled task.
 7. **Engineering follow-up:** Because this pattern is likely to recur, the SOAR engineer adds this script as an automated evidence-collection step for this alert type going forward — turning a manual investigative step into a standard playbook task for future occurrences.
 
-## Interview Notes
+## Example Scripts
 
-- Be able to explain the difference between Remote Script Execution and Live Terminal, and *why* each exists (structured/repeatable/automatable vs. interactive/exploratory).
-- Understand that the "script definition" is a derived JSON artifact, not something authored directly — interviewers may probe whether you understand entry-point parsing.
-- Be ready to discuss governance: why a scripting capability on an EDR platform is a security-sensitive feature in its own right (RBAC, auditing, blast radius).
+Five scripts worth having in any mature Scripts Library, ordered roughly from lowest to highest risk. All target Python 3.7, use only standard library (keeps them portable across agents without dependency management headaches), and follow the read-vs-write risk split from Best Practices above. Each declares a single, clear entry point so Cortex can parse parameters and return value cleanly.
 
-## Exam Notes
+### 1. `check_file_signature` — Binary signature validator (read-only)
 
-- Scripts must be **Python 3.7**.
-- Path: **Investigation & Response → Response → Action Center → Agent Scripts Library**.
-- The **entry point** is the function Cortex calls; its parameters and return value define the runtime I/O.
-- Script **definition** = JSON; script **source** = the actual code — know the distinction.
-- Action Center shows **ACTION TYPE: Endpoint Script Execution**; status values include **Completed Successfully**.
-- **Additional Data** is where the per-endpoint **Return Value** is surfaced.
-- Endpoint targeting is filtered by the script's declared **Supported OS**.
+**Purpose:** Confirm whether a binary is digitally signed and by whom — the single highest-value quick check during persistence/malware triage (see Real Production Example above).
+
+```python
+import subprocess
+import json
+
+def check_file_signature(file_path: str) -> str:
+    """
+    Checks Authenticode signature status of a Windows binary via signtool/PowerShell.
+    Returns JSON: {signed: bool, signer: str, valid: bool}
+    """
+    ps_cmd = (
+        f"Get-AuthenticodeSignature -FilePath '{file_path}' "
+        "| Select-Object Status, SignerCertificate | ConvertTo-Json"
+    )
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-Command", ps_cmd],
+        capture_output=True, text=True, timeout=15
+    )
+    data = json.loads(result.stdout) if result.stdout else {}
+    status = data.get("Status", "Unknown")
+    signer = (data.get("SignerCertificate") or {}).get("Subject", "None")
+    return json.dumps({
+        "signed": status != "NotSigned",
+        "signer": signer,
+        "valid": status == "Valid"
+    })
+```
+**Supported OS:** Windows. **Risk category:** Read-only.
+
+### 2. `read_registry_value` — Targeted registry reader (read-only)
+
+**Purpose:** Pull a single registry value for persistence/config verification without opening a full Live Terminal session — the canonical "gap-filler" script referenced earlier in this chapter.
+
+```python
+import winreg
+import json
+
+def read_registry_value(hive: str, key_path: str, value_name: str) -> str:
+    """
+    Reads one registry value. hive e.g. 'HKLM', 'HKCU'.
+    Returns JSON: {exists: bool, value: str|null, type: str|null}
+    """
+    hive_map = {"HKLM": winreg.HKEY_LOCAL_MACHINE, "HKCU": winreg.HKEY_CURRENT_USER}
+    try:
+        with winreg.OpenKey(hive_map[hive], key_path) as key:
+            value, reg_type = winreg.QueryValueEx(key, value_name)
+            return json.dumps({"exists": True, "value": str(value), "type": str(reg_type)})
+    except FileNotFoundError:
+        return json.dumps({"exists": False, "value": None, "type": None})
+```
+**Supported OS:** Windows. **Risk category:** Read-only.
+
+### 3. `list_scheduled_tasks` — Persistence enumeration (read-only)
+
+**Purpose:** Enumerate scheduled tasks matching a name/path pattern, filtered for non-default (i.e., not Microsoft-signed) entries — a fast way to surface scheduled-task-based persistence across a fleet.
+
+```python
+import subprocess
+import json
+
+def list_scheduled_tasks(name_filter: str = "") -> str:
+    """
+    Lists scheduled tasks, optionally filtered by substring match on task name.
+    Returns JSON array of {name, path, author, run_as, last_run}.
+    """
+    ps_cmd = (
+        "Get-ScheduledTask | Select-Object TaskName, TaskPath, Author "
+        "| ConvertTo-Json"
+    )
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-Command", ps_cmd],
+        capture_output=True, text=True, timeout=30
+    )
+    tasks = json.loads(result.stdout) if result.stdout else []
+    if isinstance(tasks, dict):
+        tasks = [tasks]
+    if name_filter:
+        tasks = [t for t in tasks if name_filter.lower() in t.get("TaskName", "").lower()]
+    return json.dumps(tasks)
+```
+**Supported OS:** Windows. **Risk category:** Read-only.
+
+### 4. `check_local_admins` — Privilege audit (read-only)
+
+**Purpose:** Snapshot current members of the local Administrators group — used both reactively (was an account added as part of privilege escalation?) and proactively (Jobs-driven drift detection against a known-good baseline List, see Chapter 8).
+
+```python
+import subprocess
+import json
+
+def check_local_admins() -> str:
+    """
+    Returns JSON array of local Administrators group members: [{name, type}]
+    """
+    ps_cmd = (
+        "Get-LocalGroupMember -Group 'Administrators' "
+        "| Select-Object Name, ObjectClass | ConvertTo-Json"
+    )
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-Command", ps_cmd],
+        capture_output=True, text=True, timeout=15
+    )
+    members = json.loads(result.stdout) if result.stdout else []
+    if isinstance(members, dict):
+        members = [members]
+    return json.dumps([{"name": m["Name"], "type": m["ObjectClass"]} for m in members])
+```
+**Supported OS:** Windows. **Risk category:** Read-only.
+
+### 5. `remove_scheduled_task` — Persistence removal (write / remediation)
+
+**Purpose:** Delete a confirmed-malicious scheduled task by exact name/path. Deliberately the one write-capable script in this set — included to illustrate the higher scrutiny write scripts require versus the four read-only scripts above.
+
+```python
+import subprocess
+import json
+
+def remove_scheduled_task(task_path: str) -> str:
+    """
+    Deletes a scheduled task by full path (e.g. '\\Microsoft\\Windows\\Updater\\Sync').
+    Returns JSON: {removed: bool, error: str|null}
+    Intended for use ONLY after analyst confirmation (Senior SOC Decision Process) —
+    never wire this into a fully automated playbook path.
+    """
+    ps_cmd = f"Unregister-ScheduledTask -TaskPath '{task_path}' -Confirm:$false"
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-Command", ps_cmd],
+        capture_output=True, text=True, timeout=15
+    )
+    success = result.returncode == 0
+    return json.dumps({"removed": success, "error": result.stderr.strip() if not success else None})
+```
+**Supported OS:** Windows. **Risk category:** Write / remediation — requires peer review, pilot on a lab endpoint, human-approval gate in any playbook, and a tested rollback (re-registering the task from a saved export) before production use.
 
 ## Key Takeaways
 
