@@ -1,0 +1,665 @@
+# Chapter 2 — Cortex Work Plans
+
+**Depends on:** Chapter 1 — Cortex Platform Architecture
+
+---
+
+## Overview
+
+A **Work Plan** is the operational execution layer of a Cortex case. It provides a structured workflow that combines automated playbook execution with manual analyst actions, allowing investigations to follow a consistent and repeatable process.
+
+Rather than acting as a simple checklist, a Work Plan serves as the investigation roadmap. Every automated task, analyst decision, approval, enrichment activity, and remediation action performed during an investigation is recorded within the Work Plan.
+
+Its primary objective is to ensure investigations are consistent, traceable, auditable, and repeatable across the Security Operations Center (SOC).
+
+---
+
+## Learning Objectives
+
+After completing this chapter, you should understand:
+
+- What a Cortex Work Plan is
+- Why Work Plans exist
+- How Work Plans relate to Cases
+- How Playbooks execute inside a Work Plan
+- Manual versus Automated Tasks
+- Work Plan lifecycle
+- Task execution flow
+- Task types and status indicators
+- Work Plan management
+- Ad-hoc tasks
+- Production investigation workflows
+- Senior SOC analyst decision points
+- Operational best practices
+
+---
+
+## What Is a Work Plan?
+
+A Work Plan is the execution workspace for an investigation.
+
+It records every task performed throughout the lifecycle of a case, whether that task is executed automatically by Cortex or manually by an analyst.
+
+Think of a Work Plan as the operational blueprint that coordinates investigation activities from the moment a case is created until the case is resolved.
+
+Unlike a playbook, which defines automation logic, a Work Plan represents the live execution of that logic for a specific investigation.
+
+---
+
+## Purpose
+
+Work Plans exist to standardize investigations.
+
+**Without Work Plans:**
+- Every analyst investigates differently.
+- Important investigation steps may be forgotten.
+- Response quality varies.
+- Auditing becomes difficult.
+
+**With Work Plans:**
+- Investigations follow a consistent process.
+- Automation handles repetitive work.
+- Analysts focus on decision making.
+- Every action is recorded.
+- Investigations become repeatable and measurable.
+
+---
+
+## Work Plan Architecture
+
+```
+Detection
+    │
+    ▼
+  Issue
+    │
+    ▼
+Case Created
+    │
+    ▼
+Work Plan Starts
+    │
+    ▼
+Playbook Executes
+    │
+    ▼
+Automation Tasks
+    │
+    ▼
+Manual Analyst Tasks
+    │
+    ▼
+ Response
+    │
+    ▼
+Remediation
+    │
+    ▼
+Case Resolution
+```
+
+---
+
+## Relationship Between Cases and Work Plans
+
+A **Case** is the investigation container.
+
+A **Work Plan** is the execution engine inside that case.
+
+```
+Case
+ │
+ ├── Overview
+ │
+ ├── Timeline
+ │
+ ├── Issues
+ │
+ ├── Artifacts
+ │
+ ├── Assets
+ │
+ ├── Work Plan
+ │      │
+ │      ├── Automated Tasks
+ │      ├── Manual Tasks
+ │      ├── Decisions
+ │      └── Responses
+ │
+ └── Resolution
+```
+
+A single case contains one Work Plan that documents how the investigation progresses.
+
+---
+
+## Relationship Between Playbooks and Work Plans
+
+Playbooks define what should happen. Work Plans show what actually happened.
+
+```
+Playbook
+    │
+    ▼
+Defines Tasks
+    │
+    ▼
+Case Created
+    │
+    ▼
+Work Plan Executes
+    │
+    ▼
+Tasks Become Active
+    │
+    ▼
+Results Recorded
+```
+
+The Work Plan is therefore the runtime execution of the playbook.
+
+---
+
+## Work Plan Lifecycle
+
+Every Work Plan generally follows the same lifecycle.
+
+```
+Case Created
+    │
+    ▼
+Playbook Assigned
+    │
+    ▼
+Automation Starts
+    │
+    ▼
+Conditions Evaluated
+    │
+    ▼
+Analyst Review
+    │
+    ▼
+Response Actions
+    │
+    ▼
+Remediation
+    │
+    ▼
+Verification
+    │
+    ▼
+Case Resolved
+```
+
+---
+
+## Manual vs Automated Tasks
+
+Work Plans combine automation with analyst expertise.
+
+### Automated Tasks
+
+Executed by Cortex without analyst intervention.
+
+Examples:
+- Threat intelligence enrichment
+- IP reputation lookup
+- User lookup
+- Active Directory queries
+- Endpoint isolation
+- Running scripts
+- Sending notifications
+
+**Purpose:** Reduce repetitive work.
+
+### Manual Tasks
+
+Require analyst interaction.
+
+Examples:
+- Reviewing evidence
+- Contacting IT
+- Contacting system owners
+- Approving endpoint isolation
+- Approving remediation
+- Validating business impact
+- Closing investigations
+
+**Purpose:** Capture decisions that require human judgment.
+
+---
+
+## Why Both Are Needed
+
+Automation understands technical events. Analysts understand business context.
+
+```
+Unsigned PowerShell
+        │
+        ▼
+    Automation
+        │
+        ▼
+    High Risk
+        │
+        ▼
+    SOC Review
+        │
+        ▼
+IT confirms approved software deployment
+        │
+        ▼
+    False Positive
+        │
+        ▼
+    Case Closed
+```
+
+Without analyst review, automation could incorrectly isolate a production server.
+
+---
+
+## Task Execution Flow
+
+Tasks execute in sequence.
+
+```
+Task 1
+  │
+  ▼
+Output
+  │
+  ▼
+Task 2
+  │
+  ▼
+Output
+  │
+  ▼
+Task 3
+  │
+  ▼
+Decision
+  │
+  ▼
+Task 4
+```
+
+Outputs generated by one task become inputs for later tasks.
+
+---
+
+## Ad-Hoc Tasks
+
+Work Plans also support temporary tasks created during an investigation.
+
+Example: during an investigation, the analyst decides to:
+- Collect additional forensic evidence
+- Run another enrichment script
+- Execute a custom playbook
+
+Instead of modifying the original playbook, the analyst creates an ad-hoc task for that investigation only.
+
+Ad-hoc tasks improve flexibility while preserving the integrity of standardized playbooks.
+
+---
+
+## Work Plan Metadata
+
+Each Work Plan stores metadata describing its execution.
+
+Metadata includes:
+- Task inputs
+- Task outputs
+- Task type
+- Storage usage
+- Execution information
+
+Metadata assists with:
+- Troubleshooting
+- Debugging
+- Performance analysis
+- Playbook optimization
+
+---
+
+## Production Workflow Example
+
+Suspicious PowerShell execution detected.
+
+```
+SIEM Detection
+      │
+      ▼
+    Issue
+      │
+      ▼
+    Case
+      │
+      ▼
+  Work Plan
+      │
+      ▼
+Threat Intelligence
+      │
+      ▼
+Active Directory Lookup
+      │
+      ▼
+Endpoint Enrichment
+      │
+      ▼
+Conditional Decision
+      │
+      ▼
+Critical Asset?
+      │
+     Yes
+      │
+      ▼
+  Notify SOC
+      │
+      ▼
+Analyst Review
+      │
+      ▼
+  Contact IT
+      │
+      ▼
+Approved Deployment?
+      │
+ ┌────┴────┐
+Yes         No
+ │           │
+Close   Isolate Endpoint
+Case          │
+              ▼
+      Collect Memory
+              │
+              ▼
+        Remediate
+              │
+              ▼
+        Resolve Case
+```
+
+---
+
+## Senior SOC Decision Points
+
+Automation performs technical work. The analyst makes operational decisions.
+
+Typical analyst questions include:
+- Is the affected asset business critical?
+- Is this expected administrator activity?
+- Has IT approved this change?
+- Is endpoint isolation acceptable?
+- Should evidence be collected before remediation?
+- Does this require escalation?
+
+These decisions cannot be reliably automated in every situation.
+
+---
+
+## Work Plan Benefits
+
+- Standardized investigations
+- Reduced analyst workload
+- Faster incident response
+- Improved consistency
+- Better auditability
+- Repeatable workflows
+- Easier collaboration
+- Lower Mean Time To Respond (MTTR)
+
+---
+
+## Best Practices
+
+- Automate repetitive technical tasks.
+- Reserve manual tasks for business decisions.
+- Keep Work Plans modular.
+- Use sub-playbooks for reusable logic.
+- Minimize unnecessary manual approvals.
+- Collect evidence before destructive actions.
+- Review failed tasks before rerunning playbooks.
+- Keep Work Plans easy to understand and maintain.
+
+---
+
+## Common Mistakes
+
+- Automating every decision without considering business impact.
+- Mixing unrelated investigation logic into a single playbook.
+- Ignoring failed tasks.
+- Skipping analyst validation for high-risk actions.
+- Performing remediation before collecting evidence.
+- Building overly complex Work Plans that are difficult to maintain.
+
+---
+
+## Example Work Plans
+
+The following examples demonstrate how a Cortex Work Plan orchestrates both automation and human decision-making during real-world investigations.
+
+### Example 1 — Phishing Investigation
+
+**Scenario:** An employee reports a suspicious email containing a malicious attachment.
+
+```
+Phishing Email Reported
+        │
+        ▼
+    Create Case
+        │
+        ▼
+Extract Indicators
+(URLs, IPs, Hashes)
+        │
+        ▼
+Threat Intelligence Lookup
+        │
+        ▼
+Attachment Sandboxed
+(WildFire)
+        │
+        ▼
+Conditional Task
+   Malicious?
+        │
+   ┌────┴────┐
+  No         Yes
+   │           │
+Close     Search Email
+Case      Across Mailboxes
+               │
+               ▼
+        Remove Email
+        From Users
+               │
+               ▼
+         Notify SOC
+               │
+               ▼
+        Contact User
+               │
+               ▼
+   Collect Endpoint Evidence
+               │
+               ▼
+   Endpoint Compromised?
+               │
+          ┌────┴────┐
+         No         Yes
+          │           │
+       Close    Isolate Endpoint
+       Case            │
+                        ▼
+                Collect Memory
+                        │
+                        ▼
+                 Remediation
+                        │
+                        ▼
+                  Resolve Case
+```
+
+**Why this Work Plan exists:** Automation performs IOC extraction, reputation checks, and email searches. The analyst validates business impact, communicates with users, and decides whether endpoint isolation is necessary.
+
+### Example 2 — Ransomware Investigation
+
+**Scenario:** Cortex detects ransomware activity on a finance workstation.
+
+```
+Behavioral Detection
+        │
+        ▼
+    Create Case
+        │
+        ▼
+ Causality Analysis
+        │
+        ▼
+Identify Root Process
+       (CGO)
+        │
+        ▼
+Threat Intelligence
+        │
+        ▼
+Conditional Task
+Confidence High?
+        │
+   ┌────┴────┐
+  No         Yes
+   │           │
+SOC Review  Isolate Endpoint
+                 │
+                 ▼
+       Kill Malicious Process
+                 │
+                 ▼
+       Collect Memory Image
+                 │
+                 ▼
+       Retrieve Malicious Files
+                 │
+                 ▼
+   Generate Remediation Suggestions
+                 │
+                 ▼
+     Analyst Reviews Suggestions
+                 │
+                 ▼
+       Execute Remediation
+                 │
+                 ▼
+       Verify Endpoint Health
+                 │
+                 ▼
+           Resolve Case
+```
+
+**Why this Work Plan exists:** Automation rapidly contains ransomware before lateral movement. The analyst confirms that evidence has been collected before cleanup and determines whether additional business approvals are required.
+
+### Example 3 — Suspicious PowerShell on a Critical Server
+
+**Scenario:** A PowerShell process is executed on a production Domain Controller.
+
+```
+PowerShell Detection
+        │
+        ▼
+    Create Case
+        │
+        ▼
+   Identify Asset
+        │
+        ▼
+Featured Field Check
+  Critical Asset?
+        │
+        ▼
+       YES
+        │
+        ▼
+Threat Intelligence
+        │
+        ▼
+Collect Process Information
+        │
+        ▼
+Retrieve Parent Process
+        │
+        ▼
+   Conditional Task
+Known Administrator?
+        │
+   ┌────┴─────┐
+  Yes          No
+   │            │
+Contact IT   Notify SOC
+   │              │
+Approved?         ▼
+   │        Analyst Review
+ ┌─┴───┐            │
+Yes    No           ▼
+ │      │    Business Impact Review
+Close  Collect Evidence     │
+Case         │               │
+             ▼               │
+    Approval to Isolate? ◄───┘
+             │
+        ┌────┴────┐
+        No        Yes
+        │           │
+   Continue   Isolate Server
+   Monitoring       │
+                     ▼
+             Memory Collection
+                     │
+                     ▼
+               Remediation
+                     │
+                     ▼
+                Resolve Case
+```
+
+**Why this Work Plan exists:** This example demonstrates that **critical infrastructure should not be automatically isolated simply because an alert was generated**. Automation enriches the investigation and gathers technical evidence. The Senior SOC Analyst evaluates:
+
+- Business impact
+- Asset criticality
+- Administrator activity
+- Change windows
+- IT confirmation
+- Operational risk
+
+...before authorizing any disruptive response.
+
+### Key Observation
+
+```
+   Automation
+       │
+Performs technical work
+       │
+───────┼───────
+       │
+    Analyst
+Provides business judgment
+```
+
+A well-designed Cortex Work Plan does **not** attempt to automate every decision. Instead, it automates repetitive technical tasks while ensuring that decisions involving business risk, operational impact, and critical assets remain under analyst control.
+
+---
+
+## Key Takeaways
+
+- A Work Plan is the execution roadmap for a Cortex investigation.
+- Cases contain Work Plans.
+- Playbooks define workflows; Work Plans execute them.
+- Automation performs repetitive technical tasks.
+- Analysts provide business judgment.
+- Every investigation step is recorded for consistency and auditing.
+- Well-designed Work Plans improve investigation speed, consistency, and operational maturity across the SOC.

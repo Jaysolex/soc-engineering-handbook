@@ -17,7 +17,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | Ch. | Title | Status |
 |---|---|---|
 | 1 | [Cortex Platform Architecture](01-platform-architecture/chapter-01-cortex-platform-architecture.md) | ✅ Written |
-| 2 | Cortex Work Plans | ⏳ Pending |
+| 2 | [Cortex Work Plans](02-work-plans/chapter-02-cortex-work-plans.md) | ✅ Written |
 | 3 | Playbook Task Types (SCDS) | ⏳ Pending |
 | 4 | Inputs, Outputs & Context | ⏳ Pending |
 | 5 | Indicator Extraction | ⏳ Pending |
