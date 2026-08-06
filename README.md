@@ -24,15 +24,15 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 6 | [Filters and Transformers](06-filters-and-transformers/chapter-06-filters-and-transformers.md) | ✅ Written |
 | 7 | [Lists](07-lists/chapter-07-lists.md) | ✅ Written |
 | 8 | [Automation Features & Playbook Automation](08-automation-features-playbook-automation/chapter-08-automation-features-playbook-automation.md) — merges Jobs, Automation Rules, Playbook Catalog | ✅ Written |
-| 9 | *(merged into Chapter 8)* | — |
-| 10 | *(merged into Chapter 8)* | — |
-| 11 | Quick Actions | ⏳ Pending |
-| 12 | Issues | ⏳ Pending |
-| 13 | Issue Prioritization | ⏳ Pending |
-| 14 | Cases | ⏳ Pending |
-| 15 | Response Actions | ⏳ Pending |
-| 16 | Endpoint Response | ⏳ Pending |
-| 17 | [Advanced Response Actions — Remote Script Executions](17-advanced-response-actions/chapter-17-remote-script-executions.md) | 🔶 Partial (Remote Script Executions written; Remediation Suggestions, versioning/release engineering still pending) |
+| 9 | [Quick Actions](09-quick-actions/chapter-09-quick-actions.md) | ✅ Written |
+| 10 | Issues | ⏳ Pending |
+| 11 | Issue Prioritization | ⏳ Pending |
+| 12 | Cases | ⏳ Pending |
+| 13 | Response Actions | ⏳ Pending |
+| 14 | Endpoint Response | ⏳ Pending |
+| 15 | [Advanced Response Actions — Remote Script Executions](17-advanced-response-actions/chapter-17-remote-script-executions.md)¹ | 🔶 Partial |
+
+¹ Filed under `17-advanced-response-actions/chapter-17-...` from before Chapters 9 and 10 merged into Chapter 8 (shifting everything after by two). Will be renamed to `15-advanced-response-actions/chapter-15-...` when this chapter is revisited.
 
 ## Engineering Principles (apply throughout)
 
