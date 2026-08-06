@@ -26,7 +26,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 8 | [Automation Features & Playbook Automation](08-automation-features-playbook-automation/chapter-08-automation-features-playbook-automation.md) — merges Jobs, Automation Rules, Playbook Catalog | ✅ Written |
 | 9 | [Quick Actions](09-quick-actions/chapter-09-quick-actions.md) | ✅ Written |
 | 10 | [Working with Issues](10-issues/chapter-10-issues.md) | ✅ Written |
-| 11 | Issue Prioritization | ⏳ Pending |
+| 11 | [Issue Prioritization](11-issue-prioritization/chapter-11-issue-prioritization.md) | ✅ Written |
 | 12 | Cases | ⏳ Pending |
 | 13 | Response Actions | ⏳ Pending |
 | 14 | Endpoint Response | ⏳ Pending |
