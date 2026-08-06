@@ -28,11 +28,12 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 10 | [Working with Issues](10-issues/chapter-10-issues.md) | ✅ Written |
 | 11 | [Issue Prioritization](11-issue-prioritization/chapter-11-issue-prioritization.md) | ✅ Written |
 | 12 | [Working with Cases](12-cases/chapter-12-cases.md) | ✅ Written |
-| 13 | [Response Actions](13-response-actions/chapter-13-response-actions.md) | ✅ Written |
-| 14 | Endpoint Response | ⏳ Pending |
-| 15 | [Advanced Response Actions — Remote Script Executions](17-advanced-response-actions/chapter-17-remote-script-executions.md)¹ | 🔶 Partial |
 
-¹ Filed under `17-advanced-response-actions/chapter-17-...` from before Chapters 9 and 10 merged into Chapter 8 (shifting everything after by two). Will be renamed to `15-advanced-response-actions/chapter-15-...` when this chapter is revisited.
+| 13 | [Response Actions](13-response-actions/chapter-13-response-actions.md) | ✅ Written |
+| 14 | [Endpoint Response](14-endpoint-response/chapter-14-endpoint-response.md) | ✅ Written |
+| 15 | [Advanced Response Actions — Remote Script Executions](15-advanced-response-actions/chapter-15-remote-script-executions.md) | 🔶 Partial (Remote Script Executions written; Remediation Suggestions, script versioning/release engineering still pending) |
+
+Handbook is now a clean 1–15 sequence — the folder/file renumbering flagged after Chapter 9 (when Chapters 9 and 10 merged into Chapter 8) is resolved as of this update.
 
 ## Engineering Principles (apply throughout)
 

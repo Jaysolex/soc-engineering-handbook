@@ -1,8 +1,17 @@
-# Remote Script Executions
+# Chapter 15 — Advanced Response Actions: Remote Script Executions
 
-**Module:** Advanced Response Actions
-**Category:** Endpoint Response / Action Center
-**Status:** Draft v1 — expand as production experience accumulates
+**Depends on:** Chapter 13 — Response Actions, Chapter 14 — Endpoint Response
+**Status:** Draft v1 — expand as production experience accumulates (Remediation Suggestions, script versioning/release engineering still pending)
+
+```
+Response Actions
+     ↓
+Endpoint Response
+     ↓
+Advanced Response Actions   ← YOU ARE HERE
+     ↓
+Remote Script Executions
+```
 
 ---
 
