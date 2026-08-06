@@ -23,9 +23,9 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 5 | [Indicator Extraction](05-indicator-extraction/chapter-05-indicator-extraction.md) | ✅ Written |
 | 6 | [Filters and Transformers](06-filters-and-transformers/chapter-06-filters-and-transformers.md) | ✅ Written |
 | 7 | [Lists](07-lists/chapter-07-lists.md) | ✅ Written |
-| 8 | Jobs | ⏳ Pending |
-| 9 | Automation Features | ⏳ Pending |
-| 10 | Playbook Automation | ⏳ Pending |
+| 8 | [Automation Features & Playbook Automation](08-automation-features-playbook-automation/chapter-08-automation-features-playbook-automation.md) — merges Jobs, Automation Rules, Playbook Catalog | ✅ Written |
+| 9 | *(merged into Chapter 8)* | — |
+| 10 | *(merged into Chapter 8)* | — |
 | 11 | Quick Actions | ⏳ Pending |
 | 12 | Issues | ⏳ Pending |
 | 13 | Issue Prioritization | ⏳ Pending |
