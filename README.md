@@ -27,7 +27,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 9 | [Quick Actions](09-quick-actions/chapter-09-quick-actions.md) | ✅ Written |
 | 10 | [Working with Issues](10-issues/chapter-10-issues.md) | ✅ Written |
 | 11 | [Issue Prioritization](11-issue-prioritization/chapter-11-issue-prioritization.md) | ✅ Written |
-| 12 | Cases | ⏳ Pending |
+| 12 | [Working with Cases](12-cases/chapter-12-cases.md) | ✅ Written |
 | 13 | Response Actions | ⏳ Pending |
 | 14 | Endpoint Response | ⏳ Pending |
 | 15 | [Advanced Response Actions — Remote Script Executions](17-advanced-response-actions/chapter-17-remote-script-executions.md)¹ | 🔶 Partial |
