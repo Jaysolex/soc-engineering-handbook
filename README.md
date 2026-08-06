@@ -22,7 +22,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 4 | [Inputs, Outputs & Context](04-inputs-outputs-context/chapter-04-inputs-outputs-context.md) | ✅ Written |
 | 5 | [Indicator Extraction](05-indicator-extraction/chapter-05-indicator-extraction.md) | ✅ Written |
 | 6 | [Filters and Transformers](06-filters-and-transformers/chapter-06-filters-and-transformers.md) | ✅ Written |
-| 7 | Lists | ⏳ Pending |
+| 7 | [Lists](07-lists/chapter-07-lists.md) | ✅ Written |
 | 8 | Jobs | ⏳ Pending |
 | 9 | Automation Features | ⏳ Pending |
 | 10 | Playbook Automation | ⏳ Pending |
