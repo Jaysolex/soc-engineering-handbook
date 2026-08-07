@@ -42,6 +42,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 14 | [Endpoint Response](14-endpoint-response/chapter-14-endpoint-response.md) | ✅ |
 | 15 | [Advanced Response Actions — Remote Script Executions](15-advanced-response-actions/chapter-15-remote-script-executions.md) | 🔶 |
 | 16 | [NGFW Integration & External Dynamic Lists (EDL)](16-ngfw-integration-edl/chapter-16-ngfw-integration-edl.md) | ✅ |
+| 17 | [Exclusions and Exceptions](17-exclusions-and-exceptions/chapter-17-exclusions-and-exceptions.md) | ✅ |
 
 **✅ Written · 🔶 Partial** — Chapter 15 covers Remote Script Executions in full; Remediation Suggestions and script versioning/release engineering are still to be added.
 
