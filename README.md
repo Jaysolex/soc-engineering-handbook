@@ -44,7 +44,7 @@ Chapters build on each other in this exact order — later chapters assume earli
 | 16 | [NGFW Integration & External Dynamic Lists (EDL)](16-ngfw-integration-edl/chapter-16-ngfw-integration-edl.md) | ✅ |
 | 17 | [Exclusions and Exceptions](17-exclusions-and-exceptions/chapter-17-exclusions-and-exceptions.md) | ✅ |
 | 18 | [Integrated Analysis](18-integrated-analysis/chapter-18-integrated-analysis.md) | ✅ |
-| 19 | Cortex XQL Fundamentals | ⏳ Pending |
+| 19 | [Building and Managing Queries (XQL & Query Builder)](19-xql-query-builder/chapter-19-xql-query-builder.md) | ✅ |
 
 **✅ Written · 🔶 Partial** — Chapter 15 covers Remote Script Executions in full; Remediation Suggestions and script versioning/release engineering are still to be added.
 
